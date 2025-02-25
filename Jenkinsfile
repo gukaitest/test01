@@ -31,7 +31,7 @@ pipeline {
                     sh 'node -v'
                     sh 'pnpm -v'
                     sh 'echo "开始安装依赖..."'
-                    sh 'pnpm install --prod'
+                    sh 'pnpm install'
                     sh 'echo "依赖安装完成，开始构建项目..."'
                     sh 'pnpm run build'
                     sh 'echo "项目构建完成。"'
