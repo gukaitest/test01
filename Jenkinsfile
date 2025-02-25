@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('拉取代码') {
             steps {
-                git 'https://github.com/gukaitest/personal-project-presentation.git'
+                git 'https://github.com/gukaitest/test01.git'
             }
         }
 
