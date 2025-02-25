@@ -42,7 +42,7 @@ pipeline {
 
         stage('创建 Docker 镜像') {
             steps {
-                 sh "docker build -t ${DOCKER_IMAGE} ."
+                 sh "/usr/bin/docker build -t vue3-app:latest ."
             }
         }
 
