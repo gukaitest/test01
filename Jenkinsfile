@@ -6,6 +6,7 @@ pipeline {
         DOCKER_IMAGE = 'vue3-app:latest'
         REMOTE_SERVER = '47.103.169.121'
         REMOTE_USER = 'root'
+        PATH = "${env.PATH}:/usr/bin"
     }
 
     stages {
@@ -21,7 +22,7 @@ pipeline {
                 nodejs('node 23.8.0') {
                   
                   sh 'rm -rf node_modules' // 删除 node_modules 目录
-            sh 'rm -f package-lock.json pnpm-lock.yaml' // 删除锁文件
+                   sh 'rm -f package-lock.json pnpm-lock.yaml' // 删除锁文件
                      // 安装 pnpm
                     sh 'pnpm config set registry https://registry.npmmirror.com' // 设置镜像源
                     sh 'npm install -g pnpm'
@@ -41,7 +42,7 @@ pipeline {
 
         stage('创建 Docker 镜像') {
             steps {
-                sh "docker build -t ${DOCKER_IMAGE} ."
+                 sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
