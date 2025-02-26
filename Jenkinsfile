@@ -2,30 +2,23 @@ pipeline {
     agent any
 
     environment {
-        NODE_VERSION = '18.x'
         DOCKER_IMAGE = 'vue3-app:latest'
-        REMOTE_SERVER = '47.103.169.121'
-        REMOTE_USER = 'root'
         PATH = "${env.PATH}:/usr/bin"
     }
 
     stages {
         stage('拉取代码') {
             steps {
-                sh 'git config --global --unset http.proxy'
-                sh 'git config --global --unset https.proxy'
                 git 'https://github.com/gukaitest/test01.git'
             }
         }
 
         stage('构建项目') {
             steps {
-                  
                 nodejs('node 23.8.0') {
-                  
-                  sh 'rm -rf node_modules' // 删除 node_modules 目录
-                   sh 'rm -f package-lock.json pnpm-lock.yaml' // 删除锁文件
-                     // 安装 pnpm
+                    sh 'rm -rf node_modules' // 删除 node_modules 目录
+                    sh 'rm -f package-lock.json pnpm-lock.yaml' // 删除锁文件
+                    // 安装 pnpm
                     sh 'pnpm config set registry https://registry.npmmirror.com' // 设置镜像源
                     sh 'npm install -g pnpm'
                     sh 'pnpm cache clean'
@@ -45,21 +38,17 @@ pipeline {
         stage('创建 Docker 镜像') {
             steps {
                 sh "pwd"
-                 sh "docker build -t vue3-app:latest ."
+                sh "docker build -t ${DOCKER_IMAGE} ."
             }
         }
 
         stage('部署到服务器') {
             steps {
                 script {
-                    sshagent(['your_ssh_key_credential_id']) {
-                        // 停止并删除旧容器
-                        sh "ssh ${REMOTE_USER}@${REMOTE_SERVER} 'docker stop vue3-app-container || true && docker rm vue3-app-container || true'"
-                        // 保存镜像并传输到服务器
-                        sh "docker save ${DOCKER_IMAGE} | ssh ${REMOTE_USER}@${REMOTE_SERVER} 'docker load'"
-                        // 运行新容器
-                        sh "ssh ${REMOTE_USER}@${REMOTE_SERVER} 'docker run -d -p 8080:80 --name vue3-app-container ${DOCKER_IMAGE}'"
-                    }
+                    // 停止并删除旧容器
+                    sh "docker stop vue3-app-container || true && docker rm vue3-app-container || true"
+                    // 运行新容器
+                    sh "docker run -d -p 8080:80 --name vue3-app-container ${DOCKER_IMAGE}"
                 }
             }
         }
