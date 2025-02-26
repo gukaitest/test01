@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'vue3-app:${BUILD_ID}'  # 唯一化镜像标签
-        NGINX_PORT = '80'                    # Nginx 监听端口
-        DOCKER_REGISTRY = ''                  # 可选：私有镜像仓库地址
+        DOCKER_IMAGE = 'vue3-app:${BUILD_ID}'  
+        NGINX_PORT = '80'                   
+        DOCKER_REGISTRY = ''              
     }
 
     stages {
@@ -55,7 +55,7 @@ pipeline {
 
                     // 运行新容器
                     sh "docker run -d \
-                        -p ${NGINX_PORT}:80 \  # Nginx 监听端口 -> 容器端口
+                        -p ${NGINX_PORT}:80 \  
                         --name vue3-app-container \
                         --restart always \
                         ${DOCKER_IMAGE}"
@@ -66,7 +66,7 @@ pipeline {
         stage('验证部署') {
             steps {
                 // 检查 Nginx 是否代理成功
-                sh 'curl -I http://localhost:${NGINX_PORT}'  # 应返回 HTTP 200
+                sh 'curl -I http://localhost:${NGINX_PORT}'  
 
                 // 查看容器日志
                 sh 'docker logs vue3-app-container'
