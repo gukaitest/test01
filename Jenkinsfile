@@ -12,6 +12,8 @@ pipeline {
     stages {
         stage('拉取代码') {
             steps {
+                sh 'git config --global --unset http.proxy'
+                sh 'git config --global --unset https.proxy'
                 git 'https://github.com/gukaitest/test01.git'
             }
         }
