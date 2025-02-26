@@ -55,7 +55,7 @@ pipeline {
 
                     // 运行新容器
                     sh "docker run -d \
-                        -p ${NGINX_PORT}:80 \  
+                        -p 80:80 \  
                         --name vue3-app-container \
                         --restart always \
                         ${DOCKER_IMAGE}"
