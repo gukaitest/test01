@@ -38,7 +38,7 @@ pipeline {
         stage('创建 Docker 镜像') {
             steps {
                 sh "pwd"
-                  sh 'DOCKER_HOST=unix:///var/run/docker.sock /usr/bin/docker build -t ${DOCKER_IMAGE} .'
+                  sh 'build -t ${DOCKER_IMAGE} .'
             }
         }
 
