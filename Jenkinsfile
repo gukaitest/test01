@@ -38,7 +38,7 @@ pipeline {
         stage('创建 Docker 镜像') {
             steps {
                 sh "pwd"
-                  sh 'build -t ${DOCKER_IMAGE} .'
+                  sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
 
