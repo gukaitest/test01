@@ -39,6 +39,7 @@ pipeline {
             steps {
                 sh 'pwd'          // 输出当前工作区绝对路径
                 sh 'ls -l'         // 列出所有文件，确认是否存在 Dockerfile
+                sh 'find . -name Dockerfile'  // 搜索整个目录树
                 sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
