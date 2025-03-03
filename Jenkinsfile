@@ -37,8 +37,9 @@ pipeline {
 
         stage('创建 Docker 镜像') {
             steps {
-                sh "pwd"
-                  sh 'docker build -t ${DOCKER_IMAGE} .'
+                sh 'pwd'          // 输出当前工作区绝对路径
+                sh 'ls -l'         // 列出所有文件，确认是否存在 Dockerfile
+                sh 'docker build -t ${DOCKER_IMAGE} .'
             }
         }
 
