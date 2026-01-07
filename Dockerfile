@@ -2,7 +2,7 @@
 # 如果直接拉取失败，可以使用以下镜像代理之一：
 # docker.mirrors.ustc.edu.cn/library/node:23.8.0
 # hub-mirror.c.163.com/library/node:23.8.0
-FROM nginx:alpine
+FROM docker.mirrors.ustc.edu.cn/library/node:23.8.0
 
 # 设置工作目录
 WORKDIR /app
