@@ -51,7 +51,7 @@ pipeline {
                     // 停止并删除旧容器
                     sh "docker stop vue3-app-container || true && docker rm vue3-app-container || true"
                     // 运行新容器
-                    sh "docker run -d -p 8080:80 -p 443:80 --name vue3-app-container ${DOCKER_IMAGE}"
+                    sh "docker run -d -p 8086:80  --name vue3-app-container ${DOCKER_IMAGE}"
                 }
             }
         }
