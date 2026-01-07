@@ -75,10 +75,9 @@ pipeline {
             echo '部署失败，请检查日志。'
         }
         always {
-            script {
-                // 清理旧镜像（可选，根据需要启用）
-                // sh 'docker system prune -af'
-            }
+            // 清理旧镜像（可选，根据需要启用）
+            // sh 'docker system prune -af'
+            echo 'Pipeline 执行完成'
         }
     }
 }
