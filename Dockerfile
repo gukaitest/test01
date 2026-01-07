@@ -1,5 +1,8 @@
-# 基础镜像，使用 Node.js 23.8.0（这里假设你之前用的版本就是构建所需的）
-FROM node:23.8.0
+# 基础镜像，使用 Node.js 23.8.0（使用国内镜像代理）
+# 如果直接拉取失败，可以使用以下镜像代理之一：
+# docker.mirrors.ustc.edu.cn/library/node:23.8.0
+# hub-mirror.c.163.com/library/node:23.8.0
+FROM nginx:alpine
 
 # 设置工作目录
 WORKDIR /app
@@ -22,8 +25,8 @@ COPY . .
 # 构建项目
 RUN pnpm run build
 
-# 使用 Nginx 作为生产环境服务器
-FROM nginx:stable-alpine
+# 使用 Nginx 作为生产环境服务器（使用国内镜像代理）
+FROM docker.mirrors.ustc.edu.cn/library/nginx:alpine
 
 # 移除 Nginx 默认配置
 RUN rm /etc/nginx/conf.d/default.conf
