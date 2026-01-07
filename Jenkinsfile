@@ -7,9 +7,9 @@ pipeline {
     }
 
     stages {
-        stage('拉取代码') {
+        stage('Checkout') {
             steps {
-                git 'https://github.com/gukaitest/test01.git'
+                git branch: 'main', url: 'https://github.com/gukaitest/test01.git'
             }
         }
 
@@ -35,30 +35,34 @@ pipeline {
             }
         }
 
-        stage('创建 Docker 镜像') {
-            steps {
-                sh 'pwd'          // 输出当前工作区绝对路径
-                sh 'ls -l'         // 列出所有文件，确认是否存在 Dockerfile
-                sh 'find . -name Dockerfile'  // 搜索整个目录树1
-                sh 'docker build -t vue3-app:latest .'
-
-            }
-        }
-
-        stage('部署到服务器') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // 停止并删除旧容器
-                    sh "docker stop vue3-app-container || true && docker rm vue3-app-container || true"
-                    // 运行新容器
-                    sh "docker run -d -p 8086:80  --name vue3-app-container ${DOCKER_IMAGE}"
+                    // 使用 Docker Pipeline 插件语法
+                    sh 'echo "构建镜像..."'
+                    sh 'pwd'          // 输出当前工作区绝对路径
+                    sh 'ls -l'         // 列出所有文件，确认是否存在 Dockerfile
+                    sh 'find . -name Dockerfile'  // 搜索整个目录树
+                    sh "docker build -t ${DOCKER_IMAGE} ."
                 }
             }
         }
 
-        stage('检查 Nginx 配置') {
+        stage('Cleanup Old Container') {
             steps {
-                echo '请检查 Nginx 配置是否正确指向 8080 端口。'
+                script {
+                    sh 'docker stop vue3-app-container || true'
+                    sh 'docker rm vue3-app-container || true'
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                script {
+                    // 运行新容器
+                    sh "docker run -d -p 8086:80 --name vue3-app-container ${DOCKER_IMAGE}"
+                }
             }
         }
     }
@@ -69,6 +73,12 @@ pipeline {
         }
         failure {
             echo '部署失败，请检查日志。'
+        }
+        always {
+            script {
+                // 清理旧镜像（可选，根据需要启用）
+                // sh 'docker system prune -af'
+            }
         }
     }
 }
