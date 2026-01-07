@@ -1,8 +1,9 @@
 # 基础镜像，使用 Node.js 23.8.0（使用国内镜像代理）
-# 如果直接拉取失败，可以使用以下镜像代理之一：
-# docker.mirrors.ustc.edu.cn/library/node:23.8.0
-# hub-mirror.c.163.com/library/node:23.8.0
-FROM docker.mirrors.ustc.edu.cn/library/node:23.8.0
+# 如果中科大镜像无法访问，可以尝试：
+# hub-mirror.c.163.com/library/node:23.8.0 (网易镜像)
+# mirror.baidubce.com/library/node:23.8.0 (百度云镜像)
+# 或者直接使用官方镜像: node:23.8.0
+FROM hub-mirror.c.163.com/library/node:23.8.0
 
 # 设置工作目录
 WORKDIR /app
@@ -26,7 +27,10 @@ COPY . .
 RUN pnpm run build
 
 # 使用 Nginx 作为生产环境服务器（使用国内镜像代理）
-FROM docker.mirrors.ustc.edu.cn/library/nginx:alpine
+# 如果网易镜像无法访问，可以尝试：
+# mirror.baidubce.com/library/nginx:alpine (百度云镜像)
+# 或者直接使用官方镜像: nginx:alpine
+FROM hub-mirror.c.163.com/library/nginx:alpine
 
 # 移除 Nginx 默认配置
 RUN rm /etc/nginx/conf.d/default.conf
